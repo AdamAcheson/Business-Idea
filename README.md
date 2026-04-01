@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IdeaJudge
 
-## Getting Started
+AI-powered business idea evaluator for founders. Enter your business idea using a structured framework and receive a comprehensive startup advisor report from a simulated panel of 11 world-class investors and advisors.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Structured idea input with live sentence preview
+- AI-powered evaluation using Claude
+- Viability score (1-10) with 6 subscores
+- Expert panel analysis through 11 investor lenses with dynamic weighting
+- Competitive reality check
+- Secret sauce defensibility verdict
+- Go-to-market strategy
+- 90-day action plan
+- BUILD / REVISE / ABANDON recommendation
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS + shadcn/ui
+- Anthropic Claude API
+- Zod for validation
+
+## Setup
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/AdamAcheson/Business-Idea.git
+   cd Business-Idea
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create your environment file:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. Add your Anthropic API key to `.env.local`:
+   ```
+   ANTHROPIC_API_KEY=sk-ant-xxxxx
+   ```
+
+5. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000)
+
+## Deploy
+
+Deploy to Vercel:
+
+1. Push to GitHub
+2. Import the repo in Vercel
+3. Add `ANTHROPIC_API_KEY` as an environment variable
+4. Deploy
+
+## Project Structure
+
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+src/
+  app/
+    page.tsx              # Main page (form + results)
+    layout.tsx            # Root layout
+    api/evaluate/route.ts # POST endpoint for Claude evaluation
+  components/
+    idea-form.tsx         # Structured input form
+    results-dashboard.tsx # Full report orchestrator
+    score-card.tsx        # Viability score + decision badge
+    expert-panel.tsx      # 11 expert analysis cards
+    gtm-section.tsx       # Go-to-market strategy
+    plan-section.tsx      # 90-day action plan
+    loading-state.tsx     # Progressive loading UI
+    ui/                   # shadcn/ui components
+  lib/
+    types.ts              # TypeScript interfaces
+    schemas.ts            # Zod validation schemas
+    prompt-builder.ts     # Claude prompt construction
+    weighting.ts          # Expert weight logic by business type
+    utils.ts              # Helpers and constants
+```
