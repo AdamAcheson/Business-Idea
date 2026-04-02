@@ -51,11 +51,12 @@ export default function HomePage() {
     <main className="min-h-screen bg-background">
       {/* Hero */}
       <section className="pt-16 pb-8 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-          Idea<span className="text-primary/70">Judge</span>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+          Astronomic{" "}
+          <span className="text-accent">Launchpad</span>
         </h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Get your business idea evaluated by an AI-powered panel of 11
+          Get your business idea evaluated by an AI-powered panel of 14
           world-class investors and advisors. Receive a viability score, expert
           analysis, go-to-market strategy, and a 90-day action plan.
         </p>
@@ -93,8 +94,8 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        IdeaJudge &mdash; AI-powered business idea evaluation
+      <footer className="border-t border-border py-6 text-center text-sm text-muted-foreground">
+        Astronomic Launchpad &mdash; AI-powered business idea evaluation
       </footer>
     </main>
   );

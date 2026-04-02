@@ -10,6 +10,9 @@ const ALL_EXPERTS = [
   "Gary Vaynerchuk",
   "Marcus Lemonis",
   "Bill Ackman",
+  "Barbara Corcoran",
+  "Lori Greiner",
+  "Sara Blakely",
 ] as const;
 
 type WeightMap = Partial<Record<string, number>>;
@@ -37,15 +40,26 @@ const WEIGHT_PROFILES: Record<string, WeightMap> = {
     "Steve Jobs": 1.2,
     "Gary Vaynerchuk": 1.2,
     "Mark Cuban": 1.1,
+    "Sara Blakely": 1.2,
+    "Lori Greiner": 1.15,
   },
   consumer: {
     "Steve Jobs": 1.2,
     "Gary Vaynerchuk": 1.2,
     "Mark Cuban": 1.1,
+    "Sara Blakely": 1.2,
+    "Lori Greiner": 1.15,
+  },
+  retail: {
+    "Lori Greiner": 1.25,
+    "Sara Blakely": 1.15,
+    "Barbara Corcoran": 1.1,
+    "Marcus Lemonis": 1.1,
   },
   services: {
     "Marcus Lemonis": 1.25,
     "Mark Cuban": 1.1,
+    "Barbara Corcoran": 1.15,
     "Kevin O'Leary": 1.0,
   },
   finance: {

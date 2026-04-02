@@ -22,16 +22,16 @@ interface IdeaFormProps {
 }
 
 const EMPTY_FORM: IdeaFormData = {
-  companyName: "",
-  offering: "",
-  audience: "",
-  problem: "",
-  secretSauce: "",
-  industry: "",
-  businessType: "",
-  geography: "",
-  budget: "",
-  founderBackground: "",
+  companyName: "NovaPet",
+  offering: "An AI-powered pet health monitoring collar that tracks vitals, activity, and early disease markers",
+  audience: "Pet owners aged 25-45 with dogs or cats who spend $100+/month on pet care",
+  problem: "Pet owners miss early signs of illness, leading to late diagnoses, expensive vet bills, and preventable suffering",
+  secretSauce: "Proprietary biosensor array with veterinary-grade accuracy at consumer price, plus partnerships with 200+ vet clinics for instant telehealth consultations",
+  industry: "Healthcare",
+  businessType: "Hardware + SaaS",
+  geography: "United States",
+  budget: "$50k - $100k",
+  founderBackground: "Former veterinarian with 8 years clinical experience and a co-founder who led hardware engineering at Fitbit for 5 years",
 };
 
 const INDUSTRIES = [
@@ -88,7 +88,7 @@ export function IdeaForm({ onSubmit, isLoading }: IdeaFormProps) {
     if (isValid) onSubmit(form);
   };
 
-  const previewSentence = `My Company ${form.companyName || "___"} is developing ${form.offering || "___"} to help ${form.audience || "___"} ${form.problem || "___"} with ${form.secretSauce || "___"}.`;
+  const previewSentence = `${form.companyName || "___"} is developing ${form.offering || "___"} to help ${form.audience || "___"} solve ${form.problem || "___"}.`;
 
   return (
     <Card className="border-0 shadow-lg">

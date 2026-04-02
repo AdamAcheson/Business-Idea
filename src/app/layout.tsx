@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "IdeaJudge — AI Business Idea Evaluator",
+  title: "Astronomic Launchpad — AI Business Idea Evaluator",
   description:
-    "Get your business idea evaluated by an AI-powered panel of 11 world-class investors and advisors. Receive scoring, expert analysis, go-to-market strategy, and a 90-day action plan.",
+    "Get your business idea evaluated by an AI-powered panel of 14 world-class investors and advisors. Receive scoring, expert analysis, go-to-market strategy, and a 90-day action plan.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
