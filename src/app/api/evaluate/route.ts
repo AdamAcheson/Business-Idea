@@ -19,77 +19,105 @@ export async function POST(request: Request) {
     const systemPrompt = buildSystemPrompt();
     const userPrompt = buildUserPrompt(formData, weightingInstructions);
 
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 8192,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
+    const encoder = new TextEncoder();
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          let fullText = "";
+
+          const messageStream = anthropic.messages.stream({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 8192,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }],
+          });
+
+          messageStream.on("text", (text) => {
+            fullText += text;
+            // Send token count progress to client
+            controller.enqueue(
+              encoder.encode(
+                `data: ${JSON.stringify({ type: "progress", tokens: fullText.length })}\n\n`
+              )
+            );
+          });
+
+          const finalMessage = await messageStream.finalMessage();
+
+          // Parse and validate the complete response
+          let jsonStr = fullText.trim();
+          if (jsonStr.startsWith("```")) {
+            jsonStr = jsonStr
+              .replace(/^```(?:json)?\n?/, "")
+              .replace(/\n?```$/, "");
+          }
+
+          const parsed = JSON.parse(jsonStr);
+          const validated = evaluationResponseSchema.parse(parsed);
+
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({ type: "done", data: validated })}\n\n`
+            )
+          );
+          controller.close();
+        } catch (error) {
+          let errorMessage =
+            "Something went wrong while evaluating this idea. Please try again.";
+
+          if (error instanceof z.ZodError) {
+            const isInputError = error.issues.some((e) =>
+              [
+                "companyName",
+                "offering",
+                "audience",
+                "problem",
+                "secretSauce",
+              ].includes(String(e.path[0]))
+            );
+            errorMessage = isInputError
+              ? "Please fill in all required fields."
+              : "The AI returned an unexpected format. Please try again.";
+          } else if (error instanceof SyntaxError) {
+            errorMessage = "Failed to parse AI response. Please try again.";
+          } else if (error instanceof Anthropic.APIError) {
+            errorMessage =
+              error.status === 429
+                ? "Rate limited. Please wait a moment and try again."
+                : "AI service temporarily unavailable. Please try again.";
+          }
+
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({ type: "error", error: errorMessage })}\n\n`
+            )
+          );
+          controller.close();
+        }
+      },
     });
 
-    const textBlock = message.content.find((block) => block.type === "text");
-    if (!textBlock || textBlock.type !== "text") {
-      return Response.json(
-        { error: "No response received from AI. Please try again." },
-        { status: 502 }
-      );
-    }
-
-    let jsonStr = textBlock.text.trim();
-    // Strip markdown fences if present
-    if (jsonStr.startsWith("```")) {
-      jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
-    }
-
-    const parsed = JSON.parse(jsonStr);
-    const validated = evaluationResponseSchema.parse(parsed);
-
-    return Response.json(validated);
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const isInputError = error.issues.some((e) =>
-        ["companyName", "offering", "audience", "problem", "secretSauce"].includes(
-          String(e.path[0])
-        )
-      );
-      if (isInputError) {
-        return Response.json(
-          { error: "Please fill in all required fields.", details: error.issues },
-          { status: 400 }
-        );
-      }
-      // Schema validation of LLM output failed
-      console.error("LLM output validation failed:", error.issues);
       return Response.json(
-        { error: "The AI returned an unexpected format. Please try again." },
-        { status: 502 }
+        { error: "Please fill in all required fields." },
+        { status: 400 }
       );
     }
-
-    if (error instanceof SyntaxError) {
-      console.error("JSON parse error from LLM response");
-      return Response.json(
-        { error: "Failed to parse AI response. Please try again." },
-        { status: 502 }
-      );
-    }
-
-    if (error instanceof Anthropic.APIError) {
-      console.error("Anthropic API error:", error.status, error.message);
-      if (error.status === 429) {
-        return Response.json(
-          { error: "Rate limited. Please wait a moment and try again." },
-          { status: 429 }
-        );
-      }
-      return Response.json(
-        { error: "AI service temporarily unavailable. Please try again." },
-        { status: 502 }
-      );
-    }
-
     console.error("Evaluation error:", error);
     return Response.json(
-      { error: "Something went wrong while evaluating this idea. Please try again." },
+      {
+        error:
+          "Something went wrong while evaluating this idea. Please try again.",
+      },
       { status: 500 }
     );
   }

@@ -110,6 +110,13 @@ export interface EvaluationResponse {
   plan90Days: Plan90Days;
 }
 
+export interface SavedEvaluation {
+  id: string;
+  formData: IdeaFormData;
+  result: EvaluationResponse;
+  createdAt: string;
+}
+
 export type EvaluationStatus = "idle" | "loading" | "success" | "error";
 
 export interface EvaluationState {

@@ -7,15 +7,26 @@ import { ScoreCard } from "./score-card";
 import { ExpertPanel } from "./expert-panel";
 import { GtmSection } from "./gtm-section";
 import { PlanSection } from "./plan-section";
-import { Shield, Users, Boxes } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Shield, Users, Boxes, FileDown, Presentation } from "lucide-react";
 import { cn, getVerdictColor } from "@/lib/utils";
-import type { EvaluationResponse } from "@/lib/types";
+import type { EvaluationResponse, IdeaFormData } from "@/lib/types";
 
 interface ResultsDashboardProps {
   data: EvaluationResponse;
+  formData?: IdeaFormData | null;
 }
 
-export function ResultsDashboard({ data }: ResultsDashboardProps) {
+export function ResultsDashboard({ data, formData }: ResultsDashboardProps) {
+  const handleDownloadPDF = async () => {
+    const { generateReport } = await import("@/lib/pdf-generator");
+    generateReport(data);
+  };
+
+  const handleDownloadDeck = async () => {
+    const { generatePitchDeck } = await import("@/lib/deck-generator");
+    generatePitchDeck(data, formData ?? null);
+  };
   return (
     <div className="space-y-8">
       {/* Idea Summary */}
@@ -27,6 +38,16 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
           {data.ideaSummary.secretSauce}
         </p>
         <Badge variant="secondary">{data.ideaSummary.marketCategory}</Badge>
+        <div className="flex justify-center gap-3 pt-3">
+          <Button variant="outline" size="sm" onClick={handleDownloadPDF}>
+            <FileDown className="mr-2 h-4 w-4" />
+            Download PDF
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleDownloadDeck}>
+            <Presentation className="mr-2 h-4 w-4" />
+            Pitch Deck
+          </Button>
+        </div>
       </div>
 
       {/* Core Assumptions */}

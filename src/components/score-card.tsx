@@ -1,9 +1,16 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar,
+  ResponsiveContainer,
+} from "recharts";
 import type { ViabilityScore, Decision } from "@/lib/types";
-import { cn, getDecisionColor, getScoreColor, getScoreBarColor, getConfidenceColor } from "@/lib/utils";
+import { cn, getDecisionColor, getScoreColor, getConfidenceColor } from "@/lib/utils";
 
 interface ScoreCardProps {
   viabilityScore: ViabilityScore;
@@ -11,15 +18,23 @@ interface ScoreCardProps {
 }
 
 const SUBSCORE_LABELS: Record<string, string> = {
-  problemSeverity: "Problem Severity",
-  marketSize: "Market Size",
+  problemSeverity: "Problem",
+  marketSize: "Market",
   differentiation: "Differentiation",
   defensibility: "Defensibility",
   monetization: "Monetization",
-  speedToTraction: "Speed to Traction",
+  speedToTraction: "Speed",
 };
 
 export function ScoreCard({ viabilityScore, decision }: ScoreCardProps) {
+  const radarData = Object.entries(viabilityScore.subscores).map(
+    ([key, value]) => ({
+      subject: SUBSCORE_LABELS[key] || key,
+      score: value,
+      fullMark: 10,
+    })
+  );
+
   return (
     <Card className="border-0 shadow-lg">
       <CardContent className="pt-6">
@@ -39,7 +54,10 @@ export function ScoreCard({ viabilityScore, decision }: ScoreCardProps) {
             </p>
             <Badge
               variant="outline"
-              className={cn("text-sm px-3 py-1", getConfidenceColor(viabilityScore.confidence))}
+              className={cn(
+                "text-sm px-3 py-1",
+                getConfidenceColor(viabilityScore.confidence)
+              )}
             >
               {viabilityScore.confidence} Confidence
             </Badge>
@@ -57,7 +75,9 @@ export function ScoreCard({ viabilityScore, decision }: ScoreCardProps) {
               >
                 {decision.recommendation}
               </Badge>
-              <p className="text-sm text-muted-foreground">{decision.reason}</p>
+              <p className="text-sm text-muted-foreground">
+                {decision.reason}
+              </p>
             </div>
 
             <p className="text-sm leading-relaxed">
@@ -66,23 +86,46 @@ export function ScoreCard({ viabilityScore, decision }: ScoreCardProps) {
           </div>
         </div>
 
-        {/* Subscores */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-          {Object.entries(viabilityScore.subscores).map(([key, value]) => (
-            <div key={key} className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  {SUBSCORE_LABELS[key] || key}
-                </span>
-                <span className={cn("font-semibold tabular-nums", getScoreColor(value))}>
-                  {value}/10
-                </span>
-              </div>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className={cn("h-full rounded-full transition-all", getScoreBarColor(value))}
-                  style={{ width: `${value * 10}%` }}
+        {/* Radar Chart */}
+        <div className="mt-8 flex justify-center">
+          <div className="w-full max-w-md h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="75%">
+                <PolarGrid stroke="rgba(122, 210, 231, 0.2)" />
+                <PolarAngleAxis
+                  dataKey="subject"
+                  tick={{ fill: "#8b8fad", fontSize: 12 }}
                 />
+                <Radar
+                  name="Score"
+                  dataKey="score"
+                  stroke="#7AD2E7"
+                  fill="#7AD2E7"
+                  fillOpacity={0.3}
+                  animationDuration={1200}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Subscore legend below chart */}
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
+          {Object.entries(viabilityScore.subscores).map(([key, value]) => (
+            <div key={key} className="space-y-0.5">
+              <span className="text-xs text-muted-foreground">
+                {SUBSCORE_LABELS[key] || key}
+              </span>
+              <div
+                className={cn(
+                  "text-lg font-bold tabular-nums",
+                  getScoreColor(value)
+                )}
+              >
+                {value}
+                <span className="text-xs text-muted-foreground font-normal">
+                  /10
+                </span>
               </div>
             </div>
           ))}

@@ -1,16 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IdeaForm } from "@/components/idea-form";
 import { ResultsDashboard } from "@/components/results-dashboard";
 import { LoadingState } from "@/components/loading-state";
+import { HistoryPanel } from "@/components/history-panel";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, ArrowLeft } from "lucide-react";
-import type { IdeaFormData, EvaluationResponse, EvaluationState } from "@/lib/types";
+import { saveEvaluation } from "@/lib/history";
+import type {
+  IdeaFormData,
+  EvaluationResponse,
+  EvaluationState,
+  SavedEvaluation,
+} from "@/lib/types";
 
 export default function HomePage() {
   const [state, setState] = useState<EvaluationState>({ status: "idle" });
+  const [currentFormData, setCurrentFormData] = useState<IdeaFormData | null>(null);
+  const [historyKey, setHistoryKey] = useState(0);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -18,8 +27,12 @@ export default function HomePage() {
     }
   }, [state.status]);
 
+  const [streamProgress, setStreamProgress] = useState(0);
+
   const handleSubmit = async (formData: IdeaFormData) => {
     setState({ status: "loading" });
+    setCurrentFormData(formData);
+    setStreamProgress(0);
     try {
       const response = await fetch("/api/evaluate", {
         method: "POST",
@@ -34,8 +47,36 @@ export default function HomePage() {
         );
       }
 
-      const data: EvaluationResponse = await response.json();
-      setState({ status: "success", data });
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response stream");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const json = JSON.parse(line.slice(6));
+
+          if (json.type === "progress") {
+            setStreamProgress(json.tokens);
+          } else if (json.type === "done") {
+            const data: EvaluationResponse = json.data;
+            saveEvaluation(formData, data);
+            setHistoryKey((k) => k + 1);
+            setState({ status: "success", data });
+          } else if (json.type === "error") {
+            throw new Error(json.error);
+          }
+        }
+      }
     } catch (error) {
       setState({
         status: "error",
@@ -45,6 +86,12 @@ export default function HomePage() {
             : "Something went wrong. Please try again.",
       });
     }
+  };
+
+  const handleHistorySelect = (evaluation: SavedEvaluation) => {
+    setCurrentFormData(evaluation.formData);
+    setState({ status: "success", data: evaluation.result });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -66,6 +113,7 @@ export default function HomePage() {
       <section className="max-w-4xl mx-auto px-4 pb-16">
         {state.status === "idle" || state.status === "error" ? (
           <>
+            <HistoryPanel key={historyKey} onSelect={handleHistorySelect} />
             {state.status === "error" && (
               <Alert variant="destructive" className="mb-6">
                 <AlertCircle className="h-4 w-4" />
@@ -75,10 +123,10 @@ export default function HomePage() {
             <IdeaForm onSubmit={handleSubmit} />
           </>
         ) : state.status === "loading" ? (
-          <LoadingState />
+          <LoadingState streamProgress={streamProgress} />
         ) : state.data ? (
           <>
-            <ResultsDashboard data={state.data} />
+            <ResultsDashboard data={state.data} formData={currentFormData} />
             <div className="mt-12 text-center">
               <Button
                 variant="outline"

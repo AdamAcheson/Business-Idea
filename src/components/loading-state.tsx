@@ -1,15 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Rocket, CheckCircle2 } from "lucide-react";
+import { Rocket, CheckCircle2, Radio } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { LOADING_MESSAGES } from "@/lib/utils";
 
 const STEP_DURATION = 3500;
+const ESTIMATED_CHARS = 12000; // ~12k chars for full JSON response
 
-export function LoadingState() {
+interface LoadingStateProps {
+  streamProgress?: number;
+}
+
+export function LoadingState({ streamProgress = 0 }: LoadingStateProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = LOADING_MESSAGES.length;
+  const isStreaming = streamProgress > 0;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -20,7 +26,18 @@ export function LoadingState() {
     return () => clearInterval(interval);
   }, [totalSteps]);
 
-  const progressPercent = Math.round(((currentStep + 1) / totalSteps) * 100);
+  // When streaming, progress is based on actual tokens received
+  const streamPercent = isStreaming
+    ? Math.min(95, Math.round((streamProgress / ESTIMATED_CHARS) * 100))
+    : 0;
+
+  // Step-based progress for pre-stream phase
+  const stepPercent = Math.round(((currentStep + 1) / totalSteps) * 100);
+
+  // Use streaming progress when available, otherwise step-based
+  const progressPercent = isStreaming
+    ? Math.max(streamPercent, stepPercent)
+    : stepPercent;
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
@@ -30,7 +47,11 @@ export function LoadingState() {
           <div className="flex justify-center">
             <div className="relative">
               <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <Rocket className="h-8 w-8 text-primary animate-bounce" />
+                {isStreaming ? (
+                  <Radio className="h-8 w-8 text-primary animate-pulse" />
+                ) : (
+                  <Rocket className="h-8 w-8 text-primary animate-bounce" />
+                )}
               </div>
               <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping" />
             </div>
@@ -40,7 +61,9 @@ export function LoadingState() {
           <div className="space-y-3">
             <div className="flex justify-between items-center text-sm">
               <span className="font-semibold text-foreground">
-                Evaluating your idea...
+                {isStreaming
+                  ? "Receiving expert analysis..."
+                  : "Evaluating your idea..."}
               </span>
               <span className="font-mono text-primary font-bold">
                 {progressPercent}%
@@ -48,10 +71,15 @@ export function LoadingState() {
             </div>
             <div className="h-2.5 w-full rounded-full bg-muted overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-700 ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-300 ease-out"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
+            {isStreaming && (
+              <p className="text-xs text-muted-foreground text-center">
+                {Math.round(streamProgress / 1000)}k characters received
+              </p>
+            )}
           </div>
 
           {/* Step list */}
@@ -72,7 +100,6 @@ export function LoadingState() {
                         : "text-muted-foreground/40"
                   }`}
                 >
-                  {/* Step indicator */}
                   <div className="shrink-0">
                     {isCompleted ? (
                       <CheckCircle2 className="h-4 w-4 text-primary" />
@@ -84,16 +111,16 @@ export function LoadingState() {
                       <div className="h-4 w-4 rounded-full border-2 border-muted-foreground/30" />
                     )}
                   </div>
-
                   <span>{message}</span>
                 </div>
               );
             })}
           </div>
 
-          {/* Time estimate */}
           <p className="text-center text-xs text-muted-foreground pt-2">
-            This typically takes 15-30 seconds
+            {isStreaming
+              ? "Streaming live from Claude..."
+              : "This typically takes 15-30 seconds"}
           </p>
         </CardContent>
       </Card>
