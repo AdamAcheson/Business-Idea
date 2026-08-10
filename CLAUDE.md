@@ -17,7 +17,7 @@ IdeaJudge is a single-page Next.js 16 app (App Router) that evaluates business i
 
 **Data flow:** User fills `IdeaForm` → POST to `/api/evaluate` → Claude returns structured JSON → validated by Zod → rendered in `ResultsDashboard`.
 
-**API route** (`src/app/api/evaluate/route.ts`): Validates form input with `formDataSchema`, builds a system+user prompt, calls Claude (claude-sonnet-4-20250514), parses the JSON response, validates against `evaluationResponseSchema`, and returns it. The prompt instructs Claude to respond as a panel of 11 investor/advisor personas.
+**API route** (`src/app/api/evaluate/route.ts`): Validates form input with `formDataSchema`, builds a system+user prompt, calls Claude (claude-sonnet-5), parses the JSON response, validates against `evaluationResponseSchema`, and returns it. The prompt instructs Claude to respond as a panel of 11 investor/advisor personas.
 
 **Key lib modules:**
 - `schemas.ts` — Zod schemas for both form input validation and LLM output validation. The `evaluationResponseSchema` defines the full contract between the API and frontend.
