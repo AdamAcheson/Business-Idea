@@ -26,7 +26,7 @@ const sourceSerif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "Astronomic Launchpad — AI Business Idea Evaluator",
+  title: "The Founders Council — AI Business Idea Evaluator",
   description:
     "Get your business idea evaluated by an AI-powered panel of 14 world-class investors and advisors. Receive scoring, expert analysis, go-to-market strategy, and a 90-day action plan.",
 };
