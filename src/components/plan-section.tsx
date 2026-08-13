@@ -15,31 +15,31 @@ const PHASES = [
     title: "Weeks 1-2",
     subtitle: "Launch Sprint",
     icon: Rocket,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
+    color: "text-[var(--red)]",
+    bgColor: "bg-[var(--red-tint)]",
   },
   {
     key: "weeks3to6" as const,
     title: "Weeks 3-6",
     subtitle: "Validation Phase",
     icon: TrendingUp,
-    color: "text-amber-600",
-    bgColor: "bg-amber-50",
+    color: "text-[var(--caution)]",
+    bgColor: "bg-[var(--caution-tint)]",
   },
   {
     key: "weeks7to12" as const,
     title: "Weeks 7-12",
     subtitle: "Scale Phase",
     icon: Scale,
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-50",
+    color: "text-[var(--positive)]",
+    bgColor: "bg-[var(--positive-tint)]",
   },
 ];
 
 export function PlanSection({ plan90Days }: PlanSectionProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">90-Day Action Plan</h3>
+      <h3 className="font-display text-[22px] font-semibold text-foreground">90-Day Action Plan</h3>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {PHASES.map((phase) => {
@@ -47,7 +47,7 @@ export function PlanSection({ plan90Days }: PlanSectionProps) {
           const Icon = phase.icon;
 
           return (
-            <Card key={phase.key} className="border shadow-sm">
+            <Card key={phase.key} className="border">
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-2">
                   <div className={`p-2 rounded-lg ${phase.bgColor}`}>
@@ -108,7 +108,7 @@ export function PlanSection({ plan90Days }: PlanSectionProps) {
                         key={i}
                         className="text-sm text-muted-foreground flex items-start gap-2"
                       >
-                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-amber-400 shrink-0" />
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[var(--caution)] shrink-0" />
                         {exp}
                       </li>
                     ))}

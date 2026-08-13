@@ -27,7 +27,7 @@ export function ExpertPanel({ expertAnalyses, classification }: ExpertPanelProps
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Expert Panel Analysis</h3>
+        <h3 className="font-display text-[22px] font-semibold text-foreground">Expert Panel Analysis</h3>
         <Badge variant="secondary" className="text-xs">
           {classification.primaryType}
         </Badge>
@@ -56,7 +56,7 @@ export function ExpertPanel({ expertAnalyses, classification }: ExpertPanelProps
                   {isBoosted && (
                     <Badge
                       variant="outline"
-                      className="text-xs bg-blue-50 text-blue-700 border-blue-200"
+                      className="text-xs bg-[var(--paper-shade)] text-[var(--ink-65)] border-[var(--line-strong)]"
                     >
                       {weight}x
                     </Badge>
@@ -66,22 +66,22 @@ export function ExpertPanel({ expertAnalyses, classification }: ExpertPanelProps
               <AccordionContent className="pb-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Section
-                    icon={<CheckCircle2 className="h-4 w-4 text-emerald-500" />}
+                    icon={<CheckCircle2 className="h-4 w-4 text-[var(--positive)]" />}
                     title="Strengths"
                     items={expert.strengths}
                   />
                   <Section
-                    icon={<AlertTriangle className="h-4 w-4 text-red-500" />}
+                    icon={<AlertTriangle className="h-4 w-4 text-[var(--critical)]" />}
                     title="Risks"
                     items={expert.risks}
                   />
                   <Section
-                    icon={<HelpCircle className="h-4 w-4 text-amber-500" />}
+                    icon={<HelpCircle className="h-4 w-4 text-[var(--caution)]" />}
                     title="Assumptions Challenged"
                     items={expert.assumptionsChallenged}
                   />
                   <Section
-                    icon={<Lightbulb className="h-4 w-4 text-blue-500" />}
+                    icon={<Lightbulb className="h-4 w-4 text-[var(--ink-45)]" />}
                     title="Improvements"
                     items={expert.improvements}
                   />

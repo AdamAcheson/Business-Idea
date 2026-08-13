@@ -50,12 +50,12 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="pt-16 pb-8 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-          Astronomic{" "}
-          <span className="text-accent">Launchpad</span>
+      <section className="pt-24 pb-12 px-6 md:px-24 text-center">
+        <p className="text-eyebrow mb-4">Investor-Grade Feedback</p>
+        <h1 className="font-display font-semibold text-[40px] leading-[1.1] tracking-[-0.01em] md:text-[56px]">
+          Astronomic <span className="text-primary">Launchpad</span>
         </h1>
-        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+        <p className="font-serif mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-[1.6]">
           Get your business idea evaluated by an AI-powered panel of 14
           world-class investors and advisors. Receive a viability score, expert
           analysis, go-to-market strategy, and a 90-day action plan.
@@ -63,23 +63,25 @@ export default function HomePage() {
       </section>
 
       {/* Content */}
-      <section className="max-w-4xl mx-auto px-4 pb-16">
+      <section className="max-w-[1440px] mx-auto px-6 md:px-24 pb-24">
         {state.status === "idle" || state.status === "error" ? (
           <>
             {state.status === "error" && (
-              <Alert variant="destructive" className="mb-6">
+              <Alert variant="destructive" className="mb-6 max-w-2xl mx-auto">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>{state.error}</AlertDescription>
               </Alert>
             )}
-            <IdeaForm onSubmit={handleSubmit} />
+            <div className="max-w-2xl mx-auto">
+              <IdeaForm onSubmit={handleSubmit} />
+            </div>
           </>
         ) : state.status === "loading" ? (
           <LoadingState />
         ) : state.data ? (
-          <>
+          <div className="max-w-4xl mx-auto">
             <ResultsDashboard data={state.data} />
-            <div className="mt-12 text-center">
+            <div className="mt-18 text-center">
               <Button
                 variant="outline"
                 size="lg"
@@ -89,7 +91,7 @@ export default function HomePage() {
                 Evaluate Another Idea
               </Button>
             </div>
-          </>
+          </div>
         ) : null}
       </section>
 

@@ -12,10 +12,10 @@ interface GtmSectionProps {
 export function GtmSection({ gtmStrategy }: GtmSectionProps) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Go-To-Market Strategy</h3>
+      <h3 className="font-display text-[22px] font-semibold text-foreground">Go-To-Market Strategy</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="border shadow-sm">
+        <Card className="border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Target className="h-4 w-4 text-primary" />
@@ -27,7 +27,7 @@ export function GtmSection({ gtmStrategy }: GtmSectionProps) {
           </CardContent>
         </Card>
 
-        <Card className="border shadow-sm">
+        <Card className="border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <MessageSquare className="h-4 w-4 text-primary" />
@@ -41,7 +41,7 @@ export function GtmSection({ gtmStrategy }: GtmSectionProps) {
           </CardContent>
         </Card>
 
-        <Card className="border shadow-sm">
+        <Card className="border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <DollarSign className="h-4 w-4 text-primary" />
@@ -55,7 +55,7 @@ export function GtmSection({ gtmStrategy }: GtmSectionProps) {
           </CardContent>
         </Card>
 
-        <Card className="border shadow-sm">
+        <Card className="border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Swords className="h-4 w-4 text-primary" />
@@ -71,7 +71,7 @@ export function GtmSection({ gtmStrategy }: GtmSectionProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="border shadow-sm">
+        <Card className="border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">
               Messaging Pillars
@@ -88,7 +88,7 @@ export function GtmSection({ gtmStrategy }: GtmSectionProps) {
           </CardContent>
         </Card>
 
-        <Card className="border shadow-sm">
+        <Card className="border">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Megaphone className="h-4 w-4 text-primary" />

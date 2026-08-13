@@ -9,7 +9,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
+  --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,39 +51,60 @@
 }
 
 :root {
-  /* Astronomic dark navy palette */
-  --background: #030620;
-  --foreground: #e8eaf0;
-  --card: #0d1035;
-  --card-foreground: #e8eaf0;
-  --popover: #0d1035;
-  --popover-foreground: #e8eaf0;
-  --primary: #7AD2E7;
-  --primary-foreground: #030620;
-  --secondary: #1D2264;
-  --secondary-foreground: #e8eaf0;
-  --muted: #151840;
-  --muted-foreground: #8b8fad;
-  --accent: #E24E29;
-  --accent-foreground: #ffffff;
-  --destructive: #E24E29;
-  --border: rgba(122, 210, 231, 0.15);
-  --input: rgba(122, 210, 231, 0.12);
-  --ring: #7AD2E7;
-  --chart-1: #7AD2E7;
-  --chart-2: #E24E29;
-  --chart-3: #5b8ff9;
-  --chart-4: #f7c948;
-  --chart-5: #a78bfa;
-  --radius: 0.625rem;
-  --sidebar: #0d1035;
-  --sidebar-foreground: #e8eaf0;
-  --sidebar-primary: #7AD2E7;
-  --sidebar-primary-foreground: #030620;
-  --sidebar-accent: #1D2264;
-  --sidebar-accent-foreground: #e8eaf0;
-  --sidebar-border: rgba(122, 210, 231, 0.15);
-  --sidebar-ring: #7AD2E7;
+  /* Founders Council Design System — raw palette tokens */
+  --ink: #1c1712;
+  --ink-80: #4a4038;
+  --ink-65: #5c534a;
+  --ink-45: #7d7468;
+  --line-strong: #d6cfc2;
+  --line: #e4ded2;
+  --paper-shade: #efe9dc;
+  --paper: #faf6ee;
+  --sand: #d9c7a4;
+  --red-deep: #6f0004;
+  --red: #860012;
+  --red-tint-strong: #e4cea9;
+  --red-tint: #f0e3cb;
+  --positive: #3f6b4a;
+  --positive-tint: #e1ede3;
+  --caution: #a87d2e;
+  --caution-tint: #f3e6c8;
+  --critical: var(--red);
+  --critical-tint: var(--red-tint);
+
+  /* shadcn mapping */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--red);
+  --primary-foreground: var(--paper);
+  --secondary: var(--sand);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-shade);
+  --muted-foreground: var(--ink-65);
+  --accent: var(--paper-shade);
+  --accent-foreground: var(--red);
+  --destructive: var(--critical);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--red);
+  --chart-1: var(--red);
+  --chart-2: var(--caution);
+  --chart-3: var(--positive);
+  --chart-4: var(--ink-45);
+  --chart-5: var(--sand);
+  --radius: 0.125rem;
+  --sidebar: var(--paper-shade);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--red);
+  --sidebar-primary-foreground: var(--paper);
+  --sidebar-accent: var(--sand);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--red);
 }
 
 @layer base {
@@ -93,5 +116,23 @@
   }
   html {
     @apply font-sans;
+  }
+  ::selection {
+    background: var(--red-tint-strong);
+    color: var(--ink);
+  }
+}
+
+@layer utilities {
+  .text-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--red);
+  }
+  .font-serif-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
   }
 }
