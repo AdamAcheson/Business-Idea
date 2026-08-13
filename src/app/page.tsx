@@ -6,6 +6,7 @@ import { ResultsDashboard } from "@/components/results-dashboard";
 import { LoadingState } from "@/components/loading-state";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { LogoMark } from "@/components/logo-mark";
 import { AlertCircle, ArrowLeft } from "lucide-react";
 import type { IdeaFormData, EvaluationResponse, EvaluationState } from "@/lib/types";
 
@@ -52,9 +53,12 @@ export default function HomePage() {
       {/* Hero */}
       <section className="pt-24 pb-12 px-6 md:px-24 text-center">
         <p className="text-eyebrow mb-4">Investor-Grade Feedback</p>
-        <h1 className="font-display font-semibold text-[40px] leading-[1.1] tracking-[-0.01em] md:text-[56px]">
-          Astronomic <span className="text-primary">Launchpad</span>
-        </h1>
+        <div className="flex items-center justify-center gap-3 md:gap-4">
+          <LogoMark className="h-9 w-9 md:h-12 md:w-12 text-primary shrink-0" />
+          <h1 className="font-display font-semibold text-[40px] leading-[1.1] tracking-[-0.01em] md:text-[56px]">
+            Astronomic <span className="text-primary">Launchpad</span>
+          </h1>
+        </div>
         <p className="font-serif mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-[1.6]">
           Get your business idea evaluated by an AI-powered panel of 14
           world-class investors and advisors. Receive a viability score, expert
