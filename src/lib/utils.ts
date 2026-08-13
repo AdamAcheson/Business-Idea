@@ -8,51 +8,51 @@ export function cn(...inputs: ClassValue[]) {
 export function getDecisionColor(decision: string): string {
   switch (decision) {
     case "BUILD":
-      return "bg-emerald-100 text-emerald-800 border-emerald-300";
+      return "bg-[var(--positive-tint)] text-[var(--positive)] border-[var(--positive)]/30";
     case "REVISE":
-      return "bg-amber-100 text-amber-800 border-amber-300";
+      return "bg-[var(--caution-tint)] text-[var(--caution)] border-[var(--caution)]/30";
     case "ABANDON":
-      return "bg-red-100 text-red-800 border-red-300";
+      return "bg-[var(--critical-tint)] text-[var(--critical)] border-[var(--critical)]/30";
     default:
-      return "bg-gray-100 text-gray-800 border-gray-300";
+      return "bg-muted text-muted-foreground border-border";
   }
 }
 
 export function getScoreColor(score: number): string {
-  if (score >= 7) return "text-emerald-600";
-  if (score >= 4) return "text-amber-600";
-  return "text-red-600";
+  if (score >= 7) return "text-[var(--positive)]";
+  if (score >= 4) return "text-[var(--caution)]";
+  return "text-[var(--critical)]";
 }
 
 export function getScoreBarColor(score: number): string {
-  if (score >= 7) return "bg-emerald-500";
-  if (score >= 4) return "bg-amber-500";
-  return "bg-red-500";
+  if (score >= 7) return "bg-[var(--positive)]";
+  if (score >= 4) return "bg-[var(--caution)]";
+  return "bg-[var(--critical)]";
 }
 
 export function getConfidenceColor(confidence: string): string {
   switch (confidence) {
     case "High":
-      return "bg-emerald-100 text-emerald-700";
+      return "bg-[var(--positive-tint)] text-[var(--positive)]";
     case "Medium":
-      return "bg-amber-100 text-amber-700";
+      return "bg-[var(--caution-tint)] text-[var(--caution)]";
     case "Low":
-      return "bg-red-100 text-red-700";
+      return "bg-[var(--critical-tint)] text-[var(--critical)]";
     default:
-      return "bg-gray-100 text-gray-700";
+      return "bg-muted text-muted-foreground";
   }
 }
 
 export function getVerdictColor(verdict: string): string {
   switch (verdict) {
     case "Real Differentiation":
-      return "bg-emerald-100 text-emerald-700";
+      return "bg-[var(--positive-tint)] text-[var(--positive)]";
     case "Partially Differentiated":
-      return "bg-amber-100 text-amber-700";
+      return "bg-[var(--caution-tint)] text-[var(--caution)]";
     case "Mostly Marketing Fluff":
-      return "bg-red-100 text-red-700";
+      return "bg-[var(--critical-tint)] text-[var(--critical)]";
     default:
-      return "bg-gray-100 text-gray-700";
+      return "bg-muted text-muted-foreground";
   }
 }
 

@@ -21,7 +21,7 @@ const SUBSCORE_LABELS: Record<string, string> = {
 
 export function ScoreCard({ viabilityScore, decision }: ScoreCardProps) {
   return (
-    <Card className="border-0 shadow-lg">
+    <Card className="border">
       <CardContent className="pt-6">
         <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
           {/* Main Score */}

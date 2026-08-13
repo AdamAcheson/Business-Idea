@@ -24,7 +24,7 @@ export function LoadingState() {
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
-      <Card className="border-0 shadow-lg bg-card">
+      <Card className="border bg-card">
         <CardContent className="py-10 px-8 space-y-8">
           {/* Animated rocket icon */}
           <div className="flex justify-center">

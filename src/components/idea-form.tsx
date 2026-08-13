@@ -91,7 +91,7 @@ export function IdeaForm({ onSubmit, isLoading }: IdeaFormProps) {
   const previewSentence = `${form.companyName || "___"} is developing ${form.offering || "___"} to help ${form.audience || "___"} solve ${form.problem || "___"}.`;
 
   return (
-    <Card className="border-0 shadow-lg">
+    <Card className="border">
       <CardHeader>
         <CardTitle className="text-xl">Describe Your Business Idea</CardTitle>
       </CardHeader>

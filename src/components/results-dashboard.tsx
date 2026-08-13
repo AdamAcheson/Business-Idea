@@ -19,9 +19,11 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
   return (
     <div className="space-y-8">
       {/* Idea Summary */}
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold">{data.ideaSummary.companyName}</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+      <div className="text-center space-y-3">
+        <h2 className="font-display text-[28px] font-semibold">
+          {data.ideaSummary.companyName}
+        </h2>
+        <p className="font-serif text-lg text-muted-foreground max-w-2xl mx-auto leading-[1.6]">
           {data.ideaSummary.offering} &mdash; helping{" "}
           {data.ideaSummary.audience} {data.ideaSummary.problem} with{" "}
           {data.ideaSummary.secretSauce}
@@ -30,7 +32,7 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
       </div>
 
       {/* Core Assumptions */}
-      <Card className="border shadow-sm">
+      <Card className="border">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium">
             Core Assumptions
@@ -65,9 +67,9 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
 
       {/* Competitive Reality Check */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Competitive Reality Check</h3>
+        <h3 className="font-display text-[22px] font-semibold text-foreground">Competitive Reality Check</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="border shadow-sm">
+          <Card className="border">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium flex items-center gap-2">
                 <Boxes className="h-4 w-4 text-primary" />
@@ -85,7 +87,7 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-sm">
+          <Card className="border">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary" />
@@ -103,7 +105,7 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-sm">
+          <Card className="border">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium flex items-center gap-2">
                 <Shield className="h-4 w-4 text-primary" />
@@ -130,8 +132,8 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
 
       {/* Secret Sauce Verdict */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Secret Sauce Verdict</h3>
-        <Card className="border shadow-sm">
+        <h3 className="font-display text-[22px] font-semibold text-foreground">Secret Sauce Verdict</h3>
+        <Card className="border">
           <CardContent className="pt-6">
             <div className="flex flex-col sm:flex-row gap-4 items-start">
               <div className="flex gap-2">
