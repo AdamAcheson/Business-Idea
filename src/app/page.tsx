@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className="flex items-center justify-center gap-3 md:gap-4">
           <LogoMark className="h-9 w-9 md:h-12 md:w-12 text-primary shrink-0" />
           <h1 className="font-display font-semibold text-[40px] leading-[1.1] tracking-[-0.01em] md:text-[56px]">
-            Astronomic <span className="text-primary">Launchpad</span>
+            The Founders <span className="text-primary">Council</span>
           </h1>
         </div>
         <p className="font-serif mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-[1.6]">
@@ -101,7 +101,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-border py-6 text-center text-sm text-muted-foreground">
-        Astronomic Launchpad &mdash; AI-powered business idea evaluation
+        The Founders Council &mdash; AI-powered business idea evaluation
       </footer>
     </main>
   );
