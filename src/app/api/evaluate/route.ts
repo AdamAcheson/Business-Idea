@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
     const message = await anthropic.messages.create({
       model: "claude-sonnet-5",
-      max_tokens: 16000,
+      max_tokens: 24000,
       system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
     });
@@ -38,6 +38,12 @@ export async function POST(request: Request) {
     // Strip markdown fences if present
     if (jsonStr.startsWith("```")) {
       jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+    }
+    // Defensively strip any stray preamble/postamble text outside the JSON object
+    const firstBrace = jsonStr.indexOf("{");
+    const lastBrace = jsonStr.lastIndexOf("}");
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      jsonStr = jsonStr.slice(firstBrace, lastBrace + 1);
     }
 
     const parsed = JSON.parse(jsonStr);
