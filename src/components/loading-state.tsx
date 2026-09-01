@@ -5,7 +5,7 @@ import { Rocket, CheckCircle2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { LOADING_MESSAGES } from "@/lib/utils";
 
-const STEP_DURATION = 3500;
+const STEP_DURATION = 6000;
 
 export function LoadingState() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -59,7 +59,6 @@ export function LoadingState() {
             {LOADING_MESSAGES.map((message, index) => {
               const isCompleted = index < currentStep;
               const isActive = index === currentStep;
-              const isPending = index > currentStep;
 
               return (
                 <div
@@ -93,7 +92,7 @@ export function LoadingState() {
 
           {/* Time estimate */}
           <p className="text-center text-xs text-muted-foreground pt-2">
-            This typically takes 15-30 seconds
+            This typically takes 30-60 seconds
           </p>
         </CardContent>
       </Card>
