@@ -19,12 +19,14 @@ export async function POST(request: Request) {
     const systemPrompt = buildSystemPrompt();
     const userPrompt = buildUserPrompt(formData, weightingInstructions);
 
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-5",
-      max_tokens: 24000,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
-    });
+    const message = await anthropic.messages
+      .stream({
+        model: "claude-sonnet-5",
+        max_tokens: 24000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userPrompt }],
+      })
+      .finalMessage();
 
     const textBlock = message.content.find((block) => block.type === "text");
     if (!textBlock || textBlock.type !== "text") {
