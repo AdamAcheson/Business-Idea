@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import { formDataSchema, evaluationResponseSchema } from "@/lib/schemas";
 import { buildSystemPrompt, buildUserPrompt } from "@/lib/prompt-builder";
@@ -25,59 +26,25 @@ export async function POST(request: Request) {
         max_tokens: 24000,
         system: systemPrompt,
         messages: [{ role: "user", content: userPrompt }],
+        output_config: {
+          format: zodOutputFormat(evaluationResponseSchema),
+        },
       })
       .finalMessage();
 
-    const textBlock = message.content.find((block) => block.type === "text");
-    if (!textBlock || textBlock.type !== "text") {
+    if (!message.parsed_output) {
       return Response.json(
         { error: "No response received from AI. Please try again." },
         { status: 502 }
       );
     }
 
-    let jsonStr = textBlock.text.trim();
-    // Strip markdown fences if present
-    if (jsonStr.startsWith("```")) {
-      jsonStr = jsonStr.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
-    }
-    // Defensively strip any stray preamble/postamble text outside the JSON object
-    const firstBrace = jsonStr.indexOf("{");
-    const lastBrace = jsonStr.lastIndexOf("}");
-    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-      jsonStr = jsonStr.slice(firstBrace, lastBrace + 1);
-    }
-
-    const parsed = JSON.parse(jsonStr);
-    const validated = evaluationResponseSchema.parse(parsed);
-
-    return Response.json(validated);
+    return Response.json(message.parsed_output);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const isInputError = error.issues.some((e) =>
-        ["companyName", "offering", "audience", "problem", "secretSauce"].includes(
-          String(e.path[0])
-        )
-      );
-      if (isInputError) {
-        return Response.json(
-          { error: "Please fill in all required fields.", details: error.issues },
-          { status: 400 }
-        );
-      }
-      // Schema validation of LLM output failed
-      console.error("LLM output validation failed:", error.issues);
       return Response.json(
-        { error: "The AI returned an unexpected format. Please try again." },
-        { status: 502 }
-      );
-    }
-
-    if (error instanceof SyntaxError) {
-      console.error("JSON parse error from LLM response");
-      return Response.json(
-        { error: "Failed to parse AI response. Please try again." },
-        { status: 502 }
+        { error: "Please fill in all required fields.", details: error.issues },
+        { status: 400 }
       );
     }
 
@@ -91,6 +58,16 @@ export async function POST(request: Request) {
       }
       return Response.json(
         { error: "AI service temporarily unavailable. Please try again." },
+        { status: 502 }
+      );
+    }
+
+    if (error instanceof Anthropic.AnthropicError) {
+      // The model's response didn't conform to the structured output schema
+      // (e.g. generation was cut off at max_tokens before finishing the JSON).
+      console.error("Structured output parsing failed:", error.message);
+      return Response.json(
+        { error: "The AI returned an unexpected format. Please try again." },
         { status: 502 }
       );
     }
